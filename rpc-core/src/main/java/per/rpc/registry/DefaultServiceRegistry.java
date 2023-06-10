@@ -21,8 +21,8 @@ public class DefaultServiceRegistry implements ServiceRegistry{
     /**
      * 已经注册的服务实体
      */
-    private final Map<String,Object> serviceMap = new ConcurrentHashMap<>();
-    private final Set<String> registeredService = ConcurrentHashMap.newKeySet();
+    private static final Map<String,Object> serviceMap = new ConcurrentHashMap<>();
+    private static final Set<String> registeredService = ConcurrentHashMap.newKeySet();
 
 
     @Override

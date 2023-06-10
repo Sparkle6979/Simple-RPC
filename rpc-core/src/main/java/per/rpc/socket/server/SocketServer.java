@@ -1,8 +1,10 @@
-package per.rpc.server;
+package per.rpc.socket.server;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import per.rpc.RpcServer;
 import per.rpc.registry.ServiceRegistry;
+import per.rpc.RequestHandler;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -14,8 +16,8 @@ import java.util.concurrent.*;
  * @version 1.0
  * @data 2023/6/9 15:31
  */
-public class RpcServer {
-    private static final Logger logger = LoggerFactory.getLogger(RpcServer.class);
+public class SocketServer implements RpcServer {
+    private static final Logger logger = LoggerFactory.getLogger(SocketServer.class);
 
     private static final int CORE_POOL_SIZE = 5;
     private static final int MAXIMUM_POOL_SIZE = 50;
@@ -27,7 +29,7 @@ public class RpcServer {
     private final ServiceRegistry serviceRegistry;
 
 
-    public RpcServer(ServiceRegistry serviceRegistry){
+    public SocketServer(ServiceRegistry serviceRegistry){
         this.serviceRegistry = serviceRegistry;
 
         BlockingQueue<Runnable> workingQueue = new ArrayBlockingQueue<>(BLOCKING_QUEUE_CAPACITY);
@@ -48,7 +50,7 @@ public class RpcServer {
 //            logger.error("连接时有错误发生",e);
 //        }
 //    }
-
+    @Override
     public void start(int port){
         try (ServerSocket serverSocket = new ServerSocket(port)){
             logger.info("服务器启动...");

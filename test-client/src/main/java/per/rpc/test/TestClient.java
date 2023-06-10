@@ -1,9 +1,8 @@
 package per.rpc.test;
 
-import com.sun.xml.internal.ws.api.model.wsdl.WSDLOutput;
 import per.rpc.api.HelloObject;
 import per.rpc.api.HelloService;
-import per.rpc.client.RpcClientProxy;
+import per.rpc.RpcClientProxy;
 
 /**
  * @author sparkle6979l
@@ -12,21 +11,19 @@ import per.rpc.client.RpcClientProxy;
  */
 public class TestClient {
     public static void main(String[] args) {
-        RpcClientProxy proxy = new RpcClientProxy("localhost",9000);
-        HelloService helloService = proxy.getProxy(HelloService.class);
+//        RpcClientProxy proxy = new RpcClientProxy("localhost",9000);
+//        HelloService helloService = proxy.getProxy(HelloService.class);
+//
+//        for (int i = 0; i < 3; i++) {
+//            new Thread(() -> {
+//                HelloObject object = new HelloObject(12,"This is a message");
+//                String res = helloService.Hello(object);
+//                System.out.println(res);
+//            }).start();
 
-        for (int i = 0; i < 3; i++) {
-            new Thread(() -> {
-                HelloObject object = new HelloObject(12,"This is a message");
-                String res = helloService.Hello(object);
-                System.out.println(res);
-            }).start();
 
-        }
 
 
     }
-
-
 
 }

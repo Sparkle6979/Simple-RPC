@@ -3,7 +3,7 @@ package per.rpc.test;
 import per.rpc.api.HelloService;
 import per.rpc.registry.DefaultServiceRegistry;
 import per.rpc.registry.ServiceRegistry;
-import per.rpc.server.RpcServer;
+import per.rpc.socket.server.SocketServer;
 
 /**
  * @author sparkle6979l
@@ -16,7 +16,7 @@ public class TestServer {
         HelloService helloService = new HelloServiceImpl();
         ServiceRegistry serviceRegistry = new DefaultServiceRegistry();
         serviceRegistry.register(helloService);
-        RpcServer rpcServer = new RpcServer(serviceRegistry);
+        SocketServer rpcServer = new SocketServer(serviceRegistry);
         rpcServer.start(9000);
 
 
