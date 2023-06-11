@@ -42,7 +42,7 @@ public class DefaultServiceRegistry implements ServiceRegistry{
         }
 
         for (Class<?> anInterface : interfaces) {
-            serviceMap.put(anInterface.getCanonicalName(),service);
+            serviceMap.put(anInterface.getSimpleName(),service);
         }
 
         logger.info("向接口: {} 注册服务: {}",interfaces,serviceName);

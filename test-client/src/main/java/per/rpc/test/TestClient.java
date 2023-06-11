@@ -1,8 +1,14 @@
 package per.rpc.test;
 
+import per.rpc.RpcClient;
 import per.rpc.api.HelloObject;
 import per.rpc.api.HelloService;
 import per.rpc.RpcClientProxy;
+import per.rpc.registry.ServiceRegistry;
+import per.rpc.registry.ZookeeperServiceRegistry;
+import per.rpc.socket.client.SocketClient;
+
+import java.net.InetSocketAddress;
 
 /**
  * @author sparkle6979l
@@ -11,17 +17,18 @@ import per.rpc.RpcClientProxy;
  */
 public class TestClient {
     public static void main(String[] args) {
-//        RpcClientProxy proxy = new RpcClientProxy("localhost",9000);
-//        HelloService helloService = proxy.getProxy(HelloService.class);
-//
-//        for (int i = 0; i < 3; i++) {
-//            new Thread(() -> {
-//                HelloObject object = new HelloObject(12,"This is a message");
-//                String res = helloService.Hello(object);
-//                System.out.println(res);
-//            }).start();
+        ServiceRegistry serviceRegistry = new ZookeeperServiceRegistry("localhost:2181",new InetSocketAddress("localhost",9999));
+        RpcClient client = new SocketClient(serviceRegistry);
+        RpcClientProxy proxy = new RpcClientProxy(client);
+        HelloService helloService = proxy.getProxy(HelloService.class);
 
-
+        for (int i = 0; i < 1; i++) {
+            new Thread(() -> {
+                HelloObject object = new HelloObject(12, "This is a message");
+                String res = helloService.Hello(object);
+                System.out.println(res);
+            }).start();
+        }
 
 
     }

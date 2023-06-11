@@ -28,9 +28,12 @@ public class SocketServer implements RpcServer {
 
     private final ServiceRegistry serviceRegistry;
 
+    private final ServiceRegistry serviceProvider;
 
-    public SocketServer(ServiceRegistry serviceRegistry){
+
+    public SocketServer(ServiceRegistry serviceRegistry,ServiceRegistry serviceProvider){
         this.serviceRegistry = serviceRegistry;
+        this.serviceProvider = serviceProvider;
 
         BlockingQueue<Runnable> workingQueue = new ArrayBlockingQueue<>(BLOCKING_QUEUE_CAPACITY);
         ThreadFactory threadFactory = Executors.defaultThreadFactory();
@@ -57,7 +60,7 @@ public class SocketServer implements RpcServer {
             Socket socket;
             while ((socket = serverSocket.accept())!=null){
                 logger.info("消费者连接: {}:{}",socket.getInetAddress(),socket.getPort());
-                threadPool.execute(new RequestHandlerThread(socket,requestHandler,serviceRegistry));
+                threadPool.execute(new RequestHandlerThread(socket,requestHandler,serviceProvider));
 
             }
 
