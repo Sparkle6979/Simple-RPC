@@ -6,6 +6,8 @@ import org.I0Itec.zkclient.exception.ZkMarshallingError;
 import org.I0Itec.zkclient.serialize.ZkSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import per.rpc.loadbalancer.LoadBalancer;
+import per.rpc.loadbalancer.RoundRobinLoadBalancer;
 
 import java.io.UnsupportedEncodingException;
 import java.net.InetSocketAddress;
@@ -27,12 +29,22 @@ public class ZookeeperServiceDiscover implements ServiceDiscover{
     // 本地Zookeeper端口
     private String ZOO_SERVER_ADDR = "localhost:2181";
 
+    private LoadBalancer loadBalancer;
+
     public ZookeeperServiceDiscover(String ZOO_SERVER_ADDR){
+        this.ZOO_SERVER_ADDR = ZOO_SERVER_ADDR;
+        this.loadBalancer = new RoundRobinLoadBalancer();
+        init(ZOO_SERVER_ADDR);
+    }
+
+    public ZookeeperServiceDiscover(String ZOO_SERVER_ADDR,LoadBalancer loadBalancer){
+        this.ZOO_SERVER_ADDR = ZOO_SERVER_ADDR;
+        this.loadBalancer = loadBalancer;
         init(ZOO_SERVER_ADDR);
     }
 
     private void init(String ZOO_SERVER_ADDR ){
-        this.ZOO_SERVER_ADDR = ZOO_SERVER_ADDR;
+
         zkClient = new ZkClient(ZOO_SERVER_ADDR);
 
         zkClient.setZkSerializer(new ZkSerializer() {

@@ -1,13 +1,15 @@
-package per.rpc.socket.client;
+package per.rpc.transport.socket.client;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import per.rpc.RpcClient;
+import per.rpc.serializer.CommonSerializer;
+import per.rpc.serializer.KryoSerializer;
+import per.rpc.transport.RpcClient;
 import per.rpc.entity.RpcRequest;
 import per.rpc.entity.RpcResponse;
-import per.rpc.provider.ServiceProvider;
 import per.rpc.registry.ServiceDiscover;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -24,9 +26,19 @@ public class SocketClient implements RpcClient{
 
     private final ServiceDiscover serviceDiscover;
 
+    private final CommonSerializer commonSerializer;
+
+
+
     public SocketClient(ServiceDiscover serviceDiscover){
+        this(serviceDiscover,new KryoSerializer());
+    }
+
+    public SocketClient(ServiceDiscover serviceDiscover,CommonSerializer commonSerializer){
+        this.commonSerializer = commonSerializer;
         this.serviceDiscover = serviceDiscover;
     }
+
 
     @Override
     public Object sendRequest(RpcRequest rpcRequest) {
@@ -38,7 +50,9 @@ public class SocketClient implements RpcClient{
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
             ObjectInputStream objectInputStream = new ObjectInputStream(socket.getInputStream());
 
-            objectOutputStream.writeObject(rpcRequest);
+            byte[] bytes = commonSerializer.serialize(rpcRequest);
+
+            objectOutputStream.writeObject(bytes);
             objectOutputStream.flush();
 
             return ((RpcResponse)objectInputStream.readObject()).getData();

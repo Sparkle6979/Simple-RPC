@@ -12,7 +12,7 @@ public interface ServiceRegistry {
     /**
      * 将一个服务注册进注册表
      *
-     * @param serviceName 服务名称
+     * @param service 服务实体
      * @param inetSocketAddress 提供服务的地址
      */
     <T> void register(T service, InetSocketAddress inetSocketAddress);

@@ -1,4 +1,4 @@
-package per.rpc.netty.client;
+package per.rpc.transport.netty.client;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;

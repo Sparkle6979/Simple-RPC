@@ -1,4 +1,4 @@
-package per.rpc.netty.server;
+package per.rpc.transport.netty.server;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
@@ -9,8 +9,7 @@ import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import per.rpc.RpcClient;
-import per.rpc.RpcServer;
+import per.rpc.transport.RpcServer;
 import per.rpc.codec.CommonDecoder;
 import per.rpc.codec.CommonEncoder;
 import per.rpc.serializer.JsonSerializer;

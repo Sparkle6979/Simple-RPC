@@ -5,7 +5,7 @@ import per.rpc.provider.DefaultServiceProvider;
 import per.rpc.provider.ServiceProvider;
 import per.rpc.registry.ServiceRegistry;
 import per.rpc.registry.ZookeeperServiceRegistry;
-import per.rpc.socket.server.SocketServer;
+import per.rpc.transport.socket.server.SocketServer;
 
 import java.net.InetSocketAddress;
 
@@ -19,10 +19,8 @@ public class TestServer {
     public static void main(String[] args) {
         HelloService helloService = new HelloServiceImpl();
 
-//        ServiceProvider serviceRegistry = new ZookeeperServiceProvider("localhost:2181",new InetSocketAddress("localhost",9999));
-//        serviceRegistry.register(helloService);
 
-        ServiceRegistry serviceRegistry = new ZookeeperServiceRegistry("localhost:2181");
+        ServiceRegistry serviceRegistry = new ZookeeperServiceRegistry(new InetSocketAddress("localhost",2181));
         serviceRegistry.register(helloService,new InetSocketAddress("localhost",9999));
 
         ServiceProvider serviceProvider = new DefaultServiceProvider();

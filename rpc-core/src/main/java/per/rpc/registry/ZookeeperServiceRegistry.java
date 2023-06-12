@@ -27,16 +27,16 @@ public class ZookeeperServiceRegistry implements ServiceRegistry{
 
     private ZkClient zkClient;
     // 本地Zookeeper端口
-    private String ZOO_SERVER_ADDR = "localhost:2181";
+    private InetSocketAddress ZOO_SERVER_ADDR;
 
 
-    public ZookeeperServiceRegistry(String ZOO_SERVER_ADDR){
+    public ZookeeperServiceRegistry(InetSocketAddress ZOO_SERVER_ADDR){
         init(ZOO_SERVER_ADDR);
     }
 
-    private void init(String ZOO_SERVER_ADDR ){
+    private void init(InetSocketAddress ZOO_SERVER_ADDR){
         this.ZOO_SERVER_ADDR = ZOO_SERVER_ADDR;
-        zkClient = new ZkClient(ZOO_SERVER_ADDR);
+        zkClient = new ZkClient(ZOO_SERVER_ADDR.getHostName() + ":" + ZOO_SERVER_ADDR.getPort());
 
         zkClient.setZkSerializer(new ZkSerializer() {
             @Override

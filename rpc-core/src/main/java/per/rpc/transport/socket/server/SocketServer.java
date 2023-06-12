@@ -1,12 +1,12 @@
-package per.rpc.socket.server;
+package per.rpc.transport.socket.server;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import per.rpc.RpcServer;
-import per.rpc.provider.DefaultServiceProvider;
+import per.rpc.serializer.CommonSerializer;
+import per.rpc.serializer.KryoSerializer;
+import per.rpc.transport.RpcServer;
 import per.rpc.provider.ServiceProvider;
-import per.rpc.RequestHandler;
-import per.rpc.registry.ServiceRegistry;
+import per.rpc.transport.RequestHandler;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -27,16 +27,22 @@ public class SocketServer implements RpcServer {
     private static final int BLOCKING_QUEUE_CAPACITY = 100;
     private final ExecutorService threadPool;
     private final ServiceProvider serviceProvider;
+    private final CommonSerializer commonSerializer;
 
     private RequestHandler requestHandler = new RequestHandler();
 
 
 
-    public SocketServer(ServiceProvider serviceProvider){
+    public SocketServer(ServiceProvider serviceProvider,CommonSerializer commonSerializer){
+        this.commonSerializer = commonSerializer;
         this.serviceProvider = serviceProvider;
         BlockingQueue<Runnable> workingQueue = new ArrayBlockingQueue<>(BLOCKING_QUEUE_CAPACITY);
         ThreadFactory threadFactory = Executors.defaultThreadFactory();
         threadPool = new ThreadPoolExecutor(CORE_POOL_SIZE,MAXIMUM_POOL_SIZE,KEEP_ALIVE_TIME,TimeUnit.SECONDS,workingQueue,threadFactory);
+    }
+
+    public SocketServer(ServiceProvider serviceProvider){
+        this(serviceProvider,new KryoSerializer());
     }
 
 
@@ -47,7 +53,7 @@ public class SocketServer implements RpcServer {
             Socket socket;
             while ((socket = serverSocket.accept())!=null){
                 logger.info("消费者连接: {}:{}",socket.getInetAddress(),socket.getPort());
-                threadPool.execute(new RequestHandlerThread(socket,requestHandler,serviceProvider));
+                threadPool.execute(new RequestHandlerThread(socket,requestHandler,serviceProvider,commonSerializer));
 
             }
 

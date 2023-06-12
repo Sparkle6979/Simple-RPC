@@ -1,7 +1,7 @@
 package per.rpc.test;
 
 import per.rpc.api.HelloService;
-import per.rpc.netty.server.NettyServer;
+import per.rpc.transport.netty.server.NettyServer;
 import per.rpc.provider.DefaultServiceProvider;
 import per.rpc.provider.ServiceProvider;
 

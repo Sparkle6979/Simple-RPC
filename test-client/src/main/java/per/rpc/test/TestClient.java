@@ -1,12 +1,12 @@
 package per.rpc.test;
 
-import per.rpc.RpcClient;
+import per.rpc.transport.RpcClient;
 import per.rpc.api.HelloObject;
 import per.rpc.api.HelloService;
-import per.rpc.RpcClientProxy;
+import per.rpc.transport.RpcClientProxy;
 import per.rpc.registry.ServiceDiscover;
 import per.rpc.registry.ZookeeperServiceDiscover;
-import per.rpc.socket.client.SocketClient;
+import per.rpc.transport.socket.client.SocketClient;
 
 /**
  * @author sparkle6979l

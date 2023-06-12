@@ -1,9 +1,6 @@
-package per.rpc;
+package per.rpc.transport;
 
-import lombok.AllArgsConstructor;
 import per.rpc.entity.RpcRequest;
-import per.rpc.entity.RpcResponse;
-import per.rpc.socket.client.SocketClient;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;

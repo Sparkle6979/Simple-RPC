@@ -1,4 +1,4 @@
-package per.rpc.netty.server;
+package per.rpc.transport.netty.server;
 
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
@@ -7,7 +7,7 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.util.ReferenceCountUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import per.rpc.RequestHandler;
+import per.rpc.transport.RequestHandler;
 import per.rpc.entity.RpcRequest;
 import per.rpc.entity.RpcResponse;
 import per.rpc.provider.DefaultServiceProvider;

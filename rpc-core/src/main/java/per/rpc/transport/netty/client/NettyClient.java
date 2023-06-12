@@ -1,4 +1,4 @@
-package per.rpc.netty.client;
+package per.rpc.transport.netty.client;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
@@ -8,12 +8,11 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.util.AttributeKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import per.rpc.RpcClient;
+import per.rpc.transport.RpcClient;
 import per.rpc.codec.CommonDecoder;
 import per.rpc.codec.CommonEncoder;
 import per.rpc.entity.RpcRequest;
 import per.rpc.entity.RpcResponse;
-import per.rpc.netty.server.NettyServer;
 import per.rpc.serializer.JsonSerializer;
 
 /**

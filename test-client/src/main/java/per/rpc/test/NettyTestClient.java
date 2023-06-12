@@ -1,10 +1,10 @@
 package per.rpc.test;
 
-import per.rpc.RpcClient;
-import per.rpc.RpcClientProxy;
+import per.rpc.transport.RpcClient;
+import per.rpc.transport.RpcClientProxy;
 import per.rpc.api.HelloObject;
 import per.rpc.api.HelloService;
-import per.rpc.netty.client.NettyClient;
+import per.rpc.transport.netty.client.NettyClient;
 
 /**
  * @author sparkle6979l

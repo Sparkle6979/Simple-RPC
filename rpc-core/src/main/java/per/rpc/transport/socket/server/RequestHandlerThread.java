@@ -1,13 +1,15 @@
-package per.rpc.socket.server;
+package per.rpc.transport.socket.server;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import per.rpc.RequestHandler;
+import per.rpc.serializer.CommonSerializer;
+import per.rpc.transport.RequestHandler;
 import per.rpc.entity.RpcRequest;
 import per.rpc.entity.RpcResponse;
 import per.rpc.provider.ServiceProvider;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -23,12 +25,14 @@ public class RequestHandlerThread implements Runnable{
     private Socket socket;
     private RequestHandler requestHandler;
     private ServiceProvider serviceProvider;
+    private CommonSerializer commonSerializer;
 
 
-    public RequestHandlerThread(Socket socket, RequestHandler requestHandler, ServiceProvider serviceProvider){
+    public RequestHandlerThread(Socket socket, RequestHandler requestHandler, ServiceProvider serviceProvider, CommonSerializer commonSerializer){
         this.socket = socket;
         this.requestHandler = requestHandler;
         this.serviceProvider = serviceProvider;
+        this.commonSerializer = commonSerializer;
     }
 
 
@@ -37,7 +41,9 @@ public class RequestHandlerThread implements Runnable{
         try (ObjectInputStream objectInputStream = new ObjectInputStream(socket.getInputStream());
              ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream())){
 
-            RpcRequest rpcRequest = (RpcRequest) objectInputStream.readObject();
+            byte[] bytes = (byte[])objectInputStream.readObject();
+            RpcRequest rpcRequest = (RpcRequest) commonSerializer.deserialize(bytes,RpcRequest.class);
+
             String interfaceName = rpcRequest.getInterfaceName();
             Object service = serviceProvider.getService(interfaceName);
             Object result = requestHandler.handle(rpcRequest, service);
