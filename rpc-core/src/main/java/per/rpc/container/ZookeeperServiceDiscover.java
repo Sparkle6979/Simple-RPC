@@ -1,4 +1,4 @@
-package per.rpc.registry;
+package per.rpc.container;
 
 import com.alibaba.fastjson2.JSON;
 import org.I0Itec.zkclient.ZkClient;
@@ -27,25 +27,32 @@ public class ZookeeperServiceDiscover implements ServiceDiscover{
     private ZkClient zkClient;
     private static final String service_prefix = "/per/rpc/service/";
     // 本地Zookeeper端口
-    private String ZOO_SERVER_ADDR = "localhost:2181";
+    private InetSocketAddress ZOO_SERVER_ADDR;
 
     private LoadBalancer loadBalancer;
 
-    public ZookeeperServiceDiscover(String ZOO_SERVER_ADDR){
+    public ZookeeperServiceDiscover(String host,int port,LoadBalancer loadBalancer){
+        this(new InetSocketAddress(host,port),loadBalancer);
+    }
+    public ZookeeperServiceDiscover(String host,int port){
+        this(new InetSocketAddress(host,port));
+    }
+
+    public ZookeeperServiceDiscover(InetSocketAddress ZOO_SERVER_ADDR){
         this.ZOO_SERVER_ADDR = ZOO_SERVER_ADDR;
         this.loadBalancer = new RoundRobinLoadBalancer();
         init(ZOO_SERVER_ADDR);
     }
 
-    public ZookeeperServiceDiscover(String ZOO_SERVER_ADDR,LoadBalancer loadBalancer){
+    public ZookeeperServiceDiscover(InetSocketAddress ZOO_SERVER_ADDR,LoadBalancer loadBalancer){
         this.ZOO_SERVER_ADDR = ZOO_SERVER_ADDR;
         this.loadBalancer = loadBalancer;
         init(ZOO_SERVER_ADDR);
     }
 
-    private void init(String ZOO_SERVER_ADDR ){
+    private void init(InetSocketAddress ZOO_SERVER_ADDR ){
 
-        zkClient = new ZkClient(ZOO_SERVER_ADDR);
+        zkClient = new ZkClient(ZOO_SERVER_ADDR.getHostName() + ":" + ZOO_SERVER_ADDR.getPort());
 
         zkClient.setZkSerializer(new ZkSerializer() {
             @Override

@@ -1,10 +1,11 @@
 package per.rpc.test;
 
 import per.rpc.api.HelloService;
+import per.rpc.container.ZookeeperContainer;
 import per.rpc.provider.DefaultServiceProvider;
 import per.rpc.provider.ServiceProvider;
-import per.rpc.registry.ServiceRegistry;
-import per.rpc.registry.ZookeeperServiceRegistry;
+import per.rpc.container.ServiceRegistry;
+import per.rpc.container.ZookeeperServiceRegistry;
 import per.rpc.transport.socket.server.SocketServer;
 
 import java.net.InetSocketAddress;
@@ -20,7 +21,7 @@ public class TestServer {
         HelloService helloService = new HelloServiceImpl();
 
 
-        ServiceRegistry serviceRegistry = new ZookeeperServiceRegistry(new InetSocketAddress("localhost",2181));
+        ServiceRegistry serviceRegistry = new ZookeeperContainer("localhost",2181).getServiceRegistry();
         serviceRegistry.register(helloService,new InetSocketAddress("localhost",9999));
 
         ServiceProvider serviceProvider = new DefaultServiceProvider();

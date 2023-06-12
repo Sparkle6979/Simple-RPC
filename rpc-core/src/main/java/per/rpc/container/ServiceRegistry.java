@@ -1,4 +1,4 @@
-package per.rpc.registry;
+package per.rpc.container;
 
 import java.net.InetSocketAddress;
 

@@ -1,4 +1,4 @@
-package per.rpc.registry;
+package per.rpc.container;
 
 import com.alibaba.fastjson2.JSON;
 import org.I0Itec.zkclient.ZkClient;
@@ -32,6 +32,9 @@ public class ZookeeperServiceRegistry implements ServiceRegistry{
 
     public ZookeeperServiceRegistry(InetSocketAddress ZOO_SERVER_ADDR){
         init(ZOO_SERVER_ADDR);
+    }
+    public ZookeeperServiceRegistry(String host,int port){
+        init(new InetSocketAddress(host,port));
     }
 
     private void init(InetSocketAddress ZOO_SERVER_ADDR){

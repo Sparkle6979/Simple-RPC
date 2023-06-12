@@ -7,9 +7,8 @@ import per.rpc.serializer.KryoSerializer;
 import per.rpc.transport.RpcClient;
 import per.rpc.entity.RpcRequest;
 import per.rpc.entity.RpcResponse;
-import per.rpc.registry.ServiceDiscover;
+import per.rpc.container.ServiceDiscover;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;

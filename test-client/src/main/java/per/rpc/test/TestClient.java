@@ -1,13 +1,12 @@
 package per.rpc.test;
 
-import per.rpc.serializer.JsonSerializer;
-import per.rpc.serializer.KryoSerializer;
+import per.rpc.container.ZookeeperContainer;
 import per.rpc.transport.RpcClient;
 import per.rpc.api.HelloObject;
 import per.rpc.api.HelloService;
 import per.rpc.transport.RpcClientProxy;
-import per.rpc.registry.ServiceDiscover;
-import per.rpc.registry.ZookeeperServiceDiscover;
+import per.rpc.container.ServiceDiscover;
+import per.rpc.container.ZookeeperServiceDiscover;
 import per.rpc.transport.socket.client.SocketClient;
 
 /**
@@ -18,7 +17,7 @@ import per.rpc.transport.socket.client.SocketClient;
 public class TestClient {
     public static void main(String[] args) {
 
-        ServiceDiscover serviceDiscover = new ZookeeperServiceDiscover("localhost:2181");
+        ServiceDiscover serviceDiscover = new ZookeeperContainer("localhost",2181).getserviceDiscover();
         RpcClient client = new SocketClient(serviceDiscover);
 
         RpcClientProxy proxy = new RpcClientProxy(client);
