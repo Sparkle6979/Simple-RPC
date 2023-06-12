@@ -5,7 +5,8 @@ import org.slf4j.LoggerFactory;
 import per.rpc.RpcClient;
 import per.rpc.entity.RpcRequest;
 import per.rpc.entity.RpcResponse;
-import per.rpc.registry.ServiceRegistry;
+import per.rpc.provider.ServiceProvider;
+import per.rpc.registry.ServiceDiscover;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -21,33 +22,25 @@ import java.net.Socket;
 public class SocketClient implements RpcClient{
     private static final Logger logger = LoggerFactory.getLogger(RpcClient.class);
 
-//    private final String host;
-//    private final int port;
+    private final ServiceDiscover serviceDiscover;
 
-    private final ServiceRegistry serviceRegistry;
-
-
-
-
-
-    public SocketClient(ServiceRegistry serviceRegistry){
-        this.serviceRegistry = serviceRegistry;
+    public SocketClient(ServiceDiscover serviceDiscover){
+        this.serviceDiscover = serviceDiscover;
     }
 
     @Override
     public Object sendRequest(RpcRequest rpcRequest) {
-//        System.out.println(rpcRequest.getInterfaceName());
-        InetSocketAddress inetSocketAddress  = (InetSocketAddress) serviceRegistry.getService(rpcRequest.getInterfaceName());
-//        System.out.println(inetSocketAddress.getHostName() + " " + inetSocketAddress.getPort());
+
+        InetSocketAddress inetSocketAddress  =  serviceDiscover.lookupService(rpcRequest.getInterfaceName());
 
         try(Socket socket = new Socket(inetSocketAddress.getHostName(),inetSocketAddress.getPort())){
-//            socket.connect(inetSocketAddress);
+
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
             ObjectInputStream objectInputStream = new ObjectInputStream(socket.getInputStream());
 
             objectOutputStream.writeObject(rpcRequest);
             objectOutputStream.flush();
-//            System.out.println(((RpcResponse)objectInputStream.readObject()).getData());
+
             return ((RpcResponse)objectInputStream.readObject()).getData();
         }catch (IOException | ClassNotFoundException e){
             logger.error("调用时有错误发生：",e);

@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 import per.rpc.RequestHandler;
 import per.rpc.entity.RpcRequest;
 import per.rpc.entity.RpcResponse;
-import per.rpc.registry.ServiceRegistry;
+import per.rpc.provider.ServiceProvider;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -22,13 +22,13 @@ public class RequestHandlerThread implements Runnable{
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
     private Socket socket;
     private RequestHandler requestHandler;
-    private ServiceRegistry serviceRegistry;
+    private ServiceProvider serviceProvider;
 
 
-    public RequestHandlerThread(Socket socket,RequestHandler requestHandler,ServiceRegistry serviceRegistry){
+    public RequestHandlerThread(Socket socket, RequestHandler requestHandler, ServiceProvider serviceProvider){
         this.socket = socket;
         this.requestHandler = requestHandler;
-        this.serviceRegistry = serviceRegistry;
+        this.serviceProvider = serviceProvider;
     }
 
 
@@ -39,7 +39,7 @@ public class RequestHandlerThread implements Runnable{
 
             RpcRequest rpcRequest = (RpcRequest) objectInputStream.readObject();
             String interfaceName = rpcRequest.getInterfaceName();
-            Object service = serviceRegistry.getService(interfaceName);
+            Object service = serviceProvider.getService(interfaceName);
             Object result = requestHandler.handle(rpcRequest, service);
             objectOutputStream.writeObject(RpcResponse.success(result));
             objectOutputStream.flush();

@@ -31,18 +31,6 @@ public class RpcClientProxy implements InvocationHandler {
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-//        RpcRequest rpcRequest = RpcRequest.builder()
-//                .interfaceName(method.getDeclaringClass().getName())
-//                .methodName(method.getName())
-//                .paraTypes(method.getParameterTypes())
-//                .parameters(args)
-//                .build();
-//        RpcClient rpcClient = new SocketClient(host,port);
-//
-
-
-//        return ((RpcResponse) rpcClient.sendRequest(rpcRequest)).getData();
-
 
         RpcRequest rpcRequest = new RpcRequest(method.getDeclaringClass().getSimpleName(),
                 method.getName(), method.getParameterTypes(),args);

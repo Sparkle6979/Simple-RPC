@@ -2,8 +2,8 @@ package per.rpc.test;
 
 import per.rpc.api.HelloService;
 import per.rpc.netty.server.NettyServer;
-import per.rpc.registry.DefaultServiceRegistry;
-import per.rpc.registry.ServiceRegistry;
+import per.rpc.provider.DefaultServiceProvider;
+import per.rpc.provider.ServiceProvider;
 
 /**
  * @author sparkle6979l
@@ -14,7 +14,7 @@ public class NettyTestServer {
 
     public static void main(String[] args) {
         HelloService helloService = new HelloServiceImpl();
-        ServiceRegistry registry = new DefaultServiceRegistry();
+        ServiceProvider registry = new DefaultServiceProvider();
         registry.register(helloService);
         NettyServer server = new NettyServer();
         server.start(9999);

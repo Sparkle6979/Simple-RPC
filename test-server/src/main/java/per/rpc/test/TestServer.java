@@ -1,7 +1,8 @@
 package per.rpc.test;
 
 import per.rpc.api.HelloService;
-import per.rpc.registry.DefaultServiceRegistry;
+import per.rpc.provider.DefaultServiceProvider;
+import per.rpc.provider.ServiceProvider;
 import per.rpc.registry.ServiceRegistry;
 import per.rpc.registry.ZookeeperServiceRegistry;
 import per.rpc.socket.server.SocketServer;
@@ -18,13 +19,15 @@ public class TestServer {
     public static void main(String[] args) {
         HelloService helloService = new HelloServiceImpl();
 
-        ServiceRegistry serviceRegistry = new ZookeeperServiceRegistry("localhost:2181",new InetSocketAddress("localhost",9999));
-        serviceRegistry.register(helloService);
+//        ServiceProvider serviceRegistry = new ZookeeperServiceProvider("localhost:2181",new InetSocketAddress("localhost",9999));
+//        serviceRegistry.register(helloService);
 
-        ServiceRegistry serviceProvider = new DefaultServiceRegistry();
+        ServiceRegistry serviceRegistry = new ZookeeperServiceRegistry("localhost:2181");
+        serviceRegistry.register(helloService,new InetSocketAddress("localhost",9999));
+
+        ServiceProvider serviceProvider = new DefaultServiceProvider();
         serviceProvider.register(helloService);
-
-        SocketServer rpcServer = new SocketServer(serviceRegistry,serviceProvider);
+        SocketServer rpcServer = new SocketServer(serviceProvider);
         rpcServer.start(9999);
 
 

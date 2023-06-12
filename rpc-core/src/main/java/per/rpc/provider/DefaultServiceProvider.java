@@ -1,4 +1,4 @@
-package per.rpc.registry;
+package per.rpc.provider;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,9 +14,9 @@ import java.util.concurrent.ConcurrentHashMap;
  * @version 1.0
  * @data 2023/6/9 21:54
  */
-public class DefaultServiceRegistry implements ServiceRegistry{
+public class DefaultServiceProvider implements ServiceProvider {
 
-    private static Logger logger = LoggerFactory.getLogger(DefaultServiceRegistry.class);
+    private static Logger logger = LoggerFactory.getLogger(DefaultServiceProvider.class);
 
     /**
      * 已经注册的服务实体

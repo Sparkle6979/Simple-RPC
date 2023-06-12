@@ -1,4 +1,4 @@
-package per.rpc.registry;
+package per.rpc.provider;
 
 import com.alibaba.fastjson2.JSON;
 import org.I0Itec.zkclient.ZkClient;
@@ -8,33 +8,35 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import per.rpc.enumeration.RpcError;
 import per.rpc.exception.RpcException;
-import per.rpc.provider.ZookeeperServiceProvider;
 
 import java.io.UnsupportedEncodingException;
 import java.net.InetSocketAddress;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 /**
  * @author sparkle6979l
  * @version 1.0
- * @data 2023/6/12 15:28
+ * @data 2023/6/11 18:31
  */
-public class ZookeeperServiceRegistry implements ServiceRegistry{
+@Deprecated
+public class ZookeeperServiceProvider implements ServiceProvider {
 
     private static final Logger logger = LoggerFactory.getLogger(ZookeeperServiceProvider.class);
+    private static final int HEART_TIME = 150000;
     private static final String service_prefix = "/per/rpc/service/";
-
     private ZkClient zkClient;
-    // 本地Zookeeper端口
-    private String ZOO_SERVER_ADDR = "localhost:2181";
+    private String ZOO_SERVER_ADDR;
+    private InetSocketAddress inetSocketAddress;
 
-
-    public ZookeeperServiceRegistry(String ZOO_SERVER_ADDR){
-        init(ZOO_SERVER_ADDR);
+    public ZookeeperServiceProvider(String ZOO_SERVER_ADDR, InetSocketAddress inetSocketAddress){
+        init(ZOO_SERVER_ADDR,inetSocketAddress);
     }
 
-    private void init(String ZOO_SERVER_ADDR ){
+    private void init(String ZOO_SERVER_ADDR,InetSocketAddress inetSocketAddress){
+        this.inetSocketAddress = inetSocketAddress;
         this.ZOO_SERVER_ADDR = ZOO_SERVER_ADDR;
         zkClient = new ZkClient(ZOO_SERVER_ADDR);
 
@@ -51,11 +53,14 @@ public class ZookeeperServiceRegistry implements ServiceRegistry{
         });
     }
 
+
+
     @Override
-    public <T> void register(T service, InetSocketAddress inetSocketAddress) {
+    public <T> void register(T service) {
 
 
         // 创建 ZK 永久节点（服务节点）
+
         Class<?>[] interfaces = service.getClass().getInterfaces();
         if(interfaces.length == 0){
             throw new RpcException(RpcError.SERVICE_NOT_IMPLEMENT_ANY_INTERFACE);
@@ -85,5 +90,19 @@ public class ZookeeperServiceRegistry implements ServiceRegistry{
             }
         }
 
+    }
+
+    @Override
+    public Object getService(String serviceName) {
+        String servicePath = service_prefix + serviceName;
+        List<String> childrenNode = zkClient.getChildren(servicePath);
+        String uri0 = childrenNode.get(0);
+        try {
+            String serviceInstanceJson = URLDecoder.decode(uri0,"UTF-8");
+            return JSON.parseObject(serviceInstanceJson, InetSocketAddress.class);
+        } catch (UnsupportedEncodingException e) {
+            logger.error("获取服务时有错误发生",e);
+        }
+        return null;
     }
 }
