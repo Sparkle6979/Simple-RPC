@@ -22,7 +22,7 @@ import java.nio.charset.StandardCharsets;
  */
 public class ZookeeperServiceRegistry implements ServiceRegistry{
 
-    private static final Logger logger = LoggerFactory.getLogger(ZookeeperServiceProvider.class);
+    private static final Logger logger = LoggerFactory.getLogger(ZookeeperServiceRegistry.class);
     private static final String service_prefix = "/per/rpc/service/";
 
     private ZkClient zkClient;
